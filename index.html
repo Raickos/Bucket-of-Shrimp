@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descubra Quanto Você Pode Faturar Criando Camarão no Seu Quintal | Balde de Ouro</title>
+<meta name="description" content="Em 90 segundos, descubra seu potencial de renda extra criando camarão em baldes no quintal de casa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="quiz-wrapper">
+
+  <div class="quiz-logo">🪣 <span>BALDE DE OURO</span></div>
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" id="progress"></div>
+  </div>
+
+  <!-- TELA 0: CAPA -->
+  <div class="quiz-card" data-step="0">
+    <img src="assets/images/QZ-01_hero-capa.png" alt="Camarão no balde">
+    <div class="quiz-hook">
+      <h1>Descubra em <span class="highlight">90 segundos</span> quanto VOCÊ pode faturar criando camarão no seu quintal</h1>
+      <p>Diagnóstico personalizado com base no seu perfil, espaço disponível e meta de renda.</p>
+    </div>
+    <button class="btn btn-primary" onclick="nextStep()">Começar meu diagnóstico</button>
+    <p class="quiz-hint">✓ Gratuito · ✓ Leva 90 segundos · ✓ Resultado imediato</p>
+  </div>
+
+  <!-- TELA 1 -->
+  <div class="quiz-card" data-step="1" style="display:none;">
+    <img src="assets/images/QZ-02_preco-supermercado.png" alt="Preço do camarão no supermercado">
+    <p class="quiz-question">Você sabia que o kg do camarão passou de <span class="text-red">R$ 79,90</span> em 2025?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="1" data-v="nao_compro">Sim, por isso nunca compro</button>
+      <button class="quiz-option" data-q="1" data-v="as_vezes">Sim, mas ainda compro às vezes</button>
+      <button class="quiz-option" data-q="1" data-v="nao_sabia">Não fazia ideia que tinha subido tanto</button>
+    </div>
+  </div>
+
+  <!-- TELA 2 -->
+  <div class="quiz-card" data-step="2" style="display:none;">
+    <p class="quiz-question">Qual o seu <span class="highlight">principal motivo</span> para buscar uma renda extra agora?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="2" data-v="contas">💰 Pagar minhas contas com tranquilidade</button>
+      <button class="quiz-option" data-q="2" data-v="clt">🚪 Sair do emprego CLT / ter liberdade</button>
+      <button class="quiz-option" data-q="2" data-v="aposentadoria">👴 Complementar minha aposentadoria</button>
+      <button class="quiz-option" data-q="2" data-v="sonho">⭐ Realizar um sonho (viagem, casa, carro)</button>
+    </div>
+  </div>
+
+  <!-- TELA 3 -->
+  <div class="quiz-card" data-step="3" style="display:none;">
+    <img src="assets/images/QZ-03_espaco-disponivel.png" alt="Espaço disponível em casa">
+    <p class="quiz-question">Qual o <span class="highlight">espaço disponível</span> que você tem em casa?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="3" data-v="grande">Quintal grande (10m² ou mais)</button>
+      <button class="quiz-option" data-q="3" data-v="pequeno">Quintal pequeno ou área de serviço</button>
+      <button class="quiz-option" data-q="3" data-v="varanda">Só uma varanda ou espaço bem pequeno</button>
+      <button class="quiz-option" data-q="3" data-v="nao_sei">Ainda não tenho certeza</button>
+    </div>
+  </div>
+
+  <!-- TELA 4 -->
+  <div class="quiz-card" data-step="4" style="display:none;">
+    <img src="assets/images/QZ-04_dinheiro-renda.png" alt="Renda extra">
+    <p class="quiz-question">Quanto você <span class="highlight">gostaria de faturar por mês</span> com essa renda extra?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="4" data-v="500">Entre R$ 500 e R$ 1.000</button>
+      <button class="quiz-option" data-q="4" data-v="1500">Entre R$ 1.000 e R$ 3.000</button>
+      <button class="quiz-option" data-q="4" data-v="3000">Mais de R$ 3.000</button>
+    </div>
+  </div>
+
+  <!-- TELA 5 -->
+  <div class="quiz-card" data-step="5" style="display:none;">
+    <img src="assets/images/QZ-05_duvida-pensativo.png" alt="Dúvidas sobre criar camarão">
+    <p class="quiz-question">Qual a sua <span class="highlight">MAIOR dúvida</span> sobre criar camarão em casa?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="5" data-v="cheiro">Vai ter cheiro ruim ou sujeira?</button>
+      <button class="quiz-option" data-q="5" data-v="doenca">E se os camarões morrerem / ficarem doentes?</button>
+      <button class="quiz-option" data-q="5" data-v="custo">Quanto vou precisar investir pra começar?</button>
+      <button class="quiz-option" data-q="5" data-v="venda">E depois, quem é que vai comprar?</button>
+    </div>
+  </div>
+
+  <!-- TELA 6 -->
+  <div class="quiz-card" data-step="6" style="display:none;">
+    <p class="quiz-question">Você topa dedicar <span class="highlight">15 a 20 minutos por dia</span> nas primeiras semanas?</p>
+    <div class="quiz-options">
+      <button class="quiz-option" data-q="6" data-v="sim">Sim, com certeza — estou determinado(a)</button>
+      <button class="quiz-option" data-q="6" data-v="se_valer">Sim, se o retorno valer a pena</button>
+      <button class="quiz-option" data-q="6" data-v="talvez">Talvez, ainda estou avaliando</button>
+    </div>
+  </div>
+
+  <!-- TELA 7: CAPTURA -->
+  <div class="quiz-card" data-step="7" style="display:none;">
+    <h2 style="text-align:center; margin-bottom:8px;">✅ Seu diagnóstico está pronto!</h2>
+    <p style="text-align:center; margin-bottom:20px; color: var(--text-light);">Pra onde enviamos seu <strong>Diagnóstico Personalizado</strong> + o brinde <strong>"Mapa do Camarão Caseiro"</strong> em PDF?</p>
+    <form class="quiz-form" id="captureForm" onsubmit="submitLead(event)">
+      <input type="text" id="nome" placeholder="Seu primeiro nome" required>
+      <input type="email" id="email" placeholder="Seu melhor e-mail" required>
+      <input type="tel" id="whatsapp" placeholder="WhatsApp (com DDD)" required>
+      <button type="submit" class="btn btn-primary">Ver meu diagnóstico agora →</button>
+      <p class="quiz-hint">🔒 Seus dados estão seguros. Não enviamos spam.</p>
+    </form>
+  </div>
+
+  <!-- TELA 8: LOADING -->
+  <div class="quiz-card" data-step="8" style="display:none;">
+    <div class="loading">
+      <h3 style="margin-bottom:16px;">Calculando seu potencial...</h3>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p style="margin-top:16px; color: var(--text-light); font-size: 0.95rem;">Analisando espaço, meta e perfil...</p>
+    </div>
+  </div>
+
+  <!-- TELA 9: RESULTADO -->
+  <div class="quiz-card" data-step="9" style="display:none;">
+    <div class="result-card">
+      <h2>Seu perfil é <u>COMPATÍVEL</u> ✅</h2>
+      <p style="opacity:0.9; margin-bottom:8px;">Potencial estimado de faturamento:</p>
+      <div class="result-amount" id="resultAmount">R$ 0</div>
+      <p style="opacity:0.95;">por mês, criando camarão no seu quintal</p>
+    </div>
+    <p style="text-align:center; font-size:1.05rem; margin-bottom:16px;">
+      Seu perfil é <strong>100% compatível</strong> com o <strong class="text-green">Método Balde de Ouro</strong>.
+    </p>
+    <p style="text-align:center; margin-bottom:20px; color: var(--text-light);">
+      👇 Clique abaixo para ver como o método funciona e garantir seu acesso com <strong>condição especial de lançamento</strong>:
+    </p>
+    <a href="vendas.html" class="btn btn-cta">Quero conhecer o método →</a>
+    <p class="quiz-hint">✓ Acesso imediato · ✓ Garantia de 7 dias · ✓ Valor promocional</p>
+  </div>
+
+</div>
+
+<script src="js/quiz.js"></script>
+</body>
+</html>

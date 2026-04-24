@@ -1,0 +1,13 @@
+# Ferramentas locais (dev)
+tools/node_modules/
+tools/config.json
+
+# Artefatos de build
+dist/
+*.zip
+
+# Sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

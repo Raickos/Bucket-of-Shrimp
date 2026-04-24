@@ -1,0 +1,8 @@
+tools/
+dist/
+*.zip
+.git/
+.gitignore
+.claude/
+README.md
+CLAUDE.md
