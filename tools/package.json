@@ -1,0 +1,13 @@
+{
+  "name": "balde-de-ouro-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ferramentas locais de desenvolvimento (gerador de imagens via fal.ai). Não faz parte do deploy.",
+  "scripts": {
+    "gen": "node generate.js"
+  },
+  "dependencies": {
+    "@fal-ai/client": "^1.2.0"
+  }
+}
