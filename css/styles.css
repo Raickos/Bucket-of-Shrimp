@@ -193,6 +193,9 @@ p {
 
 /* ============ LAYOUT ============ */
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   max-width: 780px;
   margin: 0 auto;
@@ -263,13 +266,13 @@ p {
 }
 
 .quiz-card {
-  width: 100%;
+  width: 90%;
   max-width: 600px;
   background: var(--white);
   border-radius: var(--radius);
-  padding: 28px 24px;
+  padding: 32px 28px;
   box-shadow: var(--shadow-lg);
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
   text-align: center;
 }
 
@@ -943,7 +946,9 @@ footer a {
   }
 
   .quiz-card {
-    padding: 20px 16px;
+    width: 90%;
+    padding: 24px 20px;
+    margin: 0 auto 20px auto;
   }
 
   .quiz-question {
