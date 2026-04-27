@@ -362,6 +362,31 @@
   <p style="margin-top:8px;"><a href="#">Termos de Uso</a> · <a href="#">Política de Privacidade</a> · <a href="mailto:contato@baldedeouro.com.br">Contato</a></p>
 </footer>
 
+<!-- Exit Intent HTML -->
+<div class="exit-intent-overlay" id="exitModal">
+  <div class="exit-intent-modal">
+    <button class="exit-intent-close" onclick="closeExitModal()">&times;</button>
+    <h2 class="exit-intent-headline">ESPERA! NÃO VÁ EMBORA...</h2>
+    <p class="exit-intent-sub">Preparamos uma condição única para você não perder essa chance!</p>
+    
+    <div class="exit-intent-proof">
+      🔥 <span id="vendas-count">14</span> pessoas compraram o Método Balde de Ouro nos últimos 20 minutos!
+    </div>
+
+    <div class="exit-intent-offer">
+      <div class="oferta-de">De R$ 97,00</div>
+      <div class="oferta-por">Por apenas</div>
+      <div class="oferta-valor">R$ 57,90</div>
+    </div>
+
+    <a href="#oferta" class="btn btn-cta exit-intent-btn" onclick="closeExitModal()">QUERO APROVEITAR O DESCONTO AGORA!</a>
+    
+    <p class="exit-intent-scarcity">
+      *Atenção: Esta oferta expira assim que você fechar esta janela. Aproveite o desconto de saída agora.
+    </p>
+  </div>
+</div>
+
 <script>
 // FAQ toggle
 document.querySelectorAll('.faq-question').forEach(btn => {

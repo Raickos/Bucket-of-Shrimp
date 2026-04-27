@@ -1,99 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Verifica se o modal já foi exibido nesta sessão para não ser intrusivo
-  if (sessionStorage.getItem('exitIntentShown')) {
-    return;
-  }
-
-  // HTML do modal injetado via JS para manter o HTML da página limpo
-  const modalHTML = `
-    <div id="exit-intent-overlay" class="exit-intent-overlay">
-      <div class="exit-intent-modal">
-        <button id="exit-intent-close" class="exit-intent-close">&times;</button>
-        <div class="exit-intent-content">
-          <h2 class="exit-intent-headline">ESPERA! NÃO VÁ EMBORA AINDA...</h2>
-          <p class="exit-intent-sub">Você acaba de ganhar uma condição única e exclusiva por tempo limitado.</p>
-          
-          <div class="exit-intent-proof">
-            🔥 14 pessoas compraram o Método Balde de Ouro nos últimos 30 minutos.
-          </div>
-
-          <div class="exit-intent-offer">
-            <div class="oferta-de">De R$ 97,00</div>
-            <div class="oferta-por">por apenas</div>
-            <div class="oferta-valor" style="color: var(--green-dark);">R$ 57,90</div>
-          </div>
-
-          <button id="exit-intent-cta" class="btn btn-cta exit-intent-btn">QUERO APROVEITAR O DESCONTO AGORA!</button>
-          
-          <p class="exit-intent-scarcity">Esta é a sua última chance de garantir o acesso. Se você fechar esta página, o preço voltará ao normal e você pode perder sua vaga no grupo atual.</p>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Injeta o HTML no fim do body
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-  const overlay = document.getElementById('exit-intent-overlay');
-  const closeBtn = document.getElementById('exit-intent-close');
-  const ctaBtn = document.getElementById('exit-intent-cta');
-  
+  const modal = document.getElementById('exitModal');
+  const vendasCountEl = document.getElementById('vendas-count');
   let isModalVisible = false;
+  let intervalId;
 
-  // Função para exibir o modal
-  const showModal = () => {
-    if (!isModalVisible && !sessionStorage.getItem('exitIntentShown')) {
-      overlay.classList.add('active');
-      isModalVisible = true;
-      sessionStorage.setItem('exitIntentShown', 'true');
-    }
-  };
-
-  // Função para esconder o modal
-  const hideModal = () => {
-    overlay.classList.remove('active');
+  // Função global para fechar o modal
+  window.closeExitModal = function() {
+    modal.classList.remove('active');
     isModalVisible = false;
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
   };
 
-  // Eventos de fechamento
-  closeBtn.addEventListener('click', hideModal);
-  
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      hideModal();
+  // Simulação de Vendas
+  const startSalesSimulation = () => {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = setInterval(() => {
+      let currentCount = parseInt(vendasCountEl.textContent, 10);
+      // Aumenta o número de forma aleatória em 1 ou 2
+      const increase = Math.floor(Math.random() * 2) + 1;
+      vendasCountEl.textContent = currentCount + increase;
+    }, 4500); // atualiza a cada 4.5 segundos
+  };
+
+  const showModal = () => {
+    // Frequência: Usar localStorage para garantir que o pop-up apareça apenas uma vez
+    if (!isModalVisible && !localStorage.getItem('exitIntentShown')) {
+      modal.classList.add('active');
+      isModalVisible = true;
+      localStorage.setItem('exitIntentShown', 'true');
+      startSalesSimulation();
     }
-  });
+  };
 
-  // Ação do botão: Aplicar o desconto na página e ir para a oferta
-  ctaBtn.addEventListener('click', () => {
-    hideModal();
-    
-    // Altera os textos de oferta na página para refletir o downsell
-    const ofertaValores = document.querySelectorAll('.oferta-valor');
-    ofertaValores.forEach(el => {
-      if(el.textContent.includes('97')) {
-         el.textContent = 'R$ 57,90';
-      }
-    });
-
-    const ofertaDe = document.querySelectorAll('.oferta-de');
-    ofertaDe.forEach(el => el.textContent = 'De R$ 97,00');
-
-    // Navega até a seção de oferta
-    const ofertaSection = document.querySelector('#oferta');
-    if(ofertaSection) {
-      ofertaSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-
-  // GATILHO DESKTOP: Quando o mouse sai da janela pelo topo (tentativa de fechar ou trocar de aba)
+  // 1. Gatilho: Detectar quando o mouse sai do topo da janela (clientY < 10)
   document.addEventListener('mouseleave', (e) => {
-    if (e.clientY <= 0) {
+    if (e.clientY < 10) {
       showModal();
     }
   });
 
-  // GATILHO MOBILE: Scroll rápido para cima
+  // 3. Mobile Gatilho Alternativo
+  // Pop-up aparecer automaticamente após 20 segundos de navegação
+  setTimeout(() => {
+    showModal();
+  }, 20000);
+
+  // Scroll rápido para cima
   let lastScrollY = window.scrollY;
   let lastScrollTime = Date.now();
 
@@ -102,11 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentTime = Date.now();
     const timeDiff = currentTime - lastScrollTime;
     
-    // Verifica se rolou para cima e o tempo entre os eventos
+    // Verifica se o usuário está subindo a página (scroll rápido)
     if (currentScrollY < lastScrollY && timeDiff > 0) {
       const scrollSpeed = (lastScrollY - currentScrollY) / timeDiff;
-      
-      // Se a velocidade for alta e não estiver no topo da página
+      // Ajuste de sensibilidade (px/ms)
       if (scrollSpeed > 2 && currentScrollY > 100) {
         showModal();
       }
@@ -114,5 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     lastScrollY = currentScrollY;
     lastScrollTime = currentTime;
+  });
+  
+  // Opcional: fechar ao clicar no overlay escuro
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeExitModal();
+    }
   });
 });
