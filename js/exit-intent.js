@@ -25,12 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const showStickyBar = () => {
     stickyBar.classList.add('active');
-    // Adiciona padding no body para não sobrepor conteúdo
+    // Adiciona margin-top no body para não sobrepor conteúdo
     const barHeight = stickyBar.offsetHeight;
-    document.body.style.paddingTop = barHeight + 'px';
+    document.body.style.marginTop = barHeight + 'px';
     // Garante que o resize ou scroll não quebre o layout
     window.addEventListener('resize', () => {
-      document.body.style.paddingTop = stickyBar.offsetHeight + 'px';
+      document.body.style.marginTop = stickyBar.offsetHeight + 'px';
     });
     // Atualiza o preço geral do site quando o sticky aparecer
     updatePricesOnPage();
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
       updateTimerDisplay(remainingTimeMs);
       if (remainingTimeMs <= 0) {
         clearInterval(timerIntervalId);
-        // Opcional: esconder a barra quando zerar ou apenas deixar em 00:00
       }
     };
 
@@ -73,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const initStickyBar = () => {
-    localStorage.setItem('stickyBarActive', 'true');
+    localStorage.setItem('exitModalClosed', 'true');
     showStickyBar();
     startStickyTimer();
   };
 
   // Se a barra já foi ativada em uma visita anterior
-  if (localStorage.getItem('stickyBarActive') === 'true') {
+  if (localStorage.getItem('exitModalClosed') === 'true') {
     showStickyBar();
     startStickyTimer();
   }
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Ativa o Sticky Bar quando o modal é fechado (por qualquer motivo)
-    if (localStorage.getItem('stickyBarActive') !== 'true') {
+    if (localStorage.getItem('exitModalClosed') !== 'true') {
       initStickyBar();
     }
   };

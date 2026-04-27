@@ -1275,22 +1275,27 @@ footer a {
   
   /* ============ STICKY OFFER BAR ============ */
   .sticky-offer-bar {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     background: var(--red);
     color: var(--white);
-    z-index: 10000;
+    z-index: 9998;
     box-shadow: var(--shadow-lg);
-    transform: translateY(-100%);
-    transition: transform 0.4s ease;
-    padding: 12px 0;
+    padding: 10px 0;
     font-family: var(--font-body);
   }
   
   .sticky-offer-bar.active {
-    transform: translateY(0);
+    display: block;
+    animation: slideDown 0.4s ease;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
   }
   
   .sticky-content {
@@ -1299,7 +1304,7 @@ footer a {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 15px;
   }
@@ -1307,14 +1312,14 @@ footer a {
   @media (min-width: 768px) {
     .sticky-content {
       flex-direction: row;
-      justify-content: space-between;
-      gap: 15px;
+      justify-content: center;
+      gap: 20px;
     }
   }
   
   .sticky-text {
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 3vw, 1rem);
     text-align: center;
   }
   
@@ -1324,15 +1329,18 @@ footer a {
     border-radius: 4px;
     font-family: var(--font-title);
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 4vw, 1.2rem);
     letter-spacing: 1px;
+    white-space: nowrap;
   }
   
   .sticky-btn {
-    font-size: 0.85rem !important;
-    padding: 10px 18px !important;
+    font-size: clamp(0.75rem, 3vw, 0.85rem) !important;
+    padding: 8px 16px !important;
     margin: 0 !important;
     width: auto !important;
     white-space: nowrap;
     max-width: none !important;
+    line-height: 1 !important;
+    border-radius: 6px !important;
   }
