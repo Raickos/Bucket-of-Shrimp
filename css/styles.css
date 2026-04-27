@@ -1173,9 +1173,9 @@ footer a {
 }
 
 .exit-intent-overlay.active {
-  opacity: 1;
-  visibility: visible;
   display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
   z-index: 9999;
 }
 
