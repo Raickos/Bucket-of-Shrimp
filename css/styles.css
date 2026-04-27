@@ -1152,3 +1152,123 @@ footer a {
     font-size: 0.95rem;
   }
 }
+
+/* ============ EXIT INTENT MODAL ============ */
+.exit-intent-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 20px;
+}
+
+.exit-intent-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.exit-intent-modal {
+  background: var(--bg);
+  border: 4px solid var(--yellow);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.exit-intent-overlay.active .exit-intent-modal {
+  transform: scale(1);
+}
+
+.exit-intent-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--text-light);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.exit-intent-close:hover {
+  color: var(--red);
+}
+
+.exit-intent-headline {
+  color: var(--red);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  margin-bottom: 10px;
+}
+
+.exit-intent-sub {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.exit-intent-proof {
+  background: var(--yellow-light);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.exit-intent-offer {
+  margin-bottom: 20px;
+}
+
+.exit-intent-offer .oferta-de {
+  font-size: 1.1rem;
+  text-decoration: line-through;
+  color: var(--text-light);
+}
+
+.exit-intent-offer .oferta-por {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.exit-intent-offer .oferta-valor {
+  font-size: 3rem;
+  font-family: var(--font-title);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--green-dark);
+}
+
+.exit-intent-btn {
+  font-size: 1rem;
+  padding: 16px 20px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.exit-intent-scarcity {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0;
+}
