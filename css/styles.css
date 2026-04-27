@@ -1274,73 +1274,47 @@ footer a {
   }
   
   /* ============ STICKY OFFER BAR ============ */
-  .sticky-offer-bar {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: var(--red);
-    color: var(--white);
-    z-index: 9998;
-    box-shadow: var(--shadow-lg);
-    padding: 10px 0;
-    font-family: var(--font-body);
-  }
-  
-  .sticky-offer-bar.active {
-    display: block;
-    animation: slideDown 0.4s ease;
-  }
+.sticky-offer-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--red);
+  color: white;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
 
-  @keyframes slideDown {
-    from { transform: translateY(-100%); }
-    to { transform: translateY(0); }
-  }
-  
-  .sticky-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 15px;
-  }
-  
-  @media (min-width: 768px) {
-    .sticky-content {
-      flex-direction: row;
-      justify-content: center;
-      gap: 20px;
-    }
-  }
-  
-  .sticky-text {
-    font-weight: 700;
-    font-size: clamp(0.85rem, 3vw, 1rem);
-    text-align: center;
-  }
-  
-  .sticky-timer {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-family: var(--font-title);
-    font-weight: 800;
-    font-size: clamp(1rem, 4vw, 1.2rem);
-    letter-spacing: 1px;
-    white-space: nowrap;
-  }
-  
-  .sticky-btn {
-    font-size: clamp(0.75rem, 3vw, 0.85rem) !important;
-    padding: 8px 16px !important;
-    margin: 0 !important;
-    width: auto !important;
-    white-space: nowrap;
-    max-width: none !important;
-    line-height: 1 !important;
-    border-radius: 6px !important;
-  }
+.sticky-offer-bar .timer {
+  background: rgba(0,0,0,0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--yellow);
+  min-width: 60px;
+  text-align: center;
+}
+
+.sticky-offer-bar .btn-offer {
+  background: var(--yellow);
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  transition: transform 0.2s;
+}
+
+/* Ajuste mobile */
+@media (max-width: 600px) {
+  .sticky-offer-bar { flex-direction: column; gap: 5px; text-align: center; font-size: 0.8rem; }
+  body { padding-top: 80px !important; }
+}

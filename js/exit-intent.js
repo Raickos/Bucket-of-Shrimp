@@ -1,58 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('exitModal');
   const vendasCountEl = document.getElementById('vendas-count');
-  
-  const stickyBar = document.getElementById('sticky-offer-bar');
-  const stickyTimerEl = document.getElementById('sticky-timer');
-  const stickyBtn = document.getElementById('sticky-btn');
-  
-  let isModalVisible = false;
   let intervalId;
   let timerIntervalId;
 
   // ==== LÓGICA DO STICKY BAR ====
-  
-  const updatePricesOnPage = () => {
-    const ofertaValores = document.querySelectorAll('.oferta-valor');
-    ofertaValores.forEach(el => {
-      if(el.textContent.includes('97')) {
-         el.textContent = 'R$ 57,90';
-      }
-    });
-    const ofertaDe = document.querySelectorAll('.oferta-de');
-    ofertaDe.forEach(el => el.textContent = 'De R$ 97,00');
-  };
 
-  const showStickyBar = () => {
-    stickyBar.classList.add('active');
-    // Adiciona margin-top no body para não sobrepor conteúdo
-    const barHeight = stickyBar.offsetHeight;
-    document.body.style.marginTop = barHeight + 'px';
-    // Garante que o resize ou scroll não quebre o layout
-    window.addEventListener('resize', () => {
-      document.body.style.marginTop = stickyBar.offsetHeight + 'px';
-    });
-    // Atualiza o preço geral do site quando o sticky aparecer
-    updatePricesOnPage();
-  };
-
-  const updateTimerDisplay = (remainingTimeMs) => {
+  const updateTimerDisplay = (timerEl, remainingTimeMs) => {
     if (remainingTimeMs <= 0) {
-      stickyTimerEl.textContent = "00:00";
+      timerEl.textContent = "00:00";
       clearInterval(timerIntervalId);
       return;
     }
     const minutes = Math.floor(remainingTimeMs / 60000);
     const seconds = Math.floor((remainingTimeMs % 60000) / 1000);
-    stickyTimerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const startStickyTimer = () => {
+  const startStickyTimer = (timerEl) => {
     let expirationTime = localStorage.getItem('stickyOfferExpiration');
     const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
 
     if (!expirationTime) {
-      // Define a expiração para daqui a 15 minutos
       expirationTime = Date.now() + FIFTEEN_MINUTES_MS;
       localStorage.setItem('stickyOfferExpiration', expirationTime);
     } else {
@@ -61,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const checkTimer = () => {
       const remainingTimeMs = expirationTime - Date.now();
-      updateTimerDisplay(remainingTimeMs);
+      updateTimerDisplay(timerEl, remainingTimeMs);
       if (remainingTimeMs <= 0) {
         clearInterval(timerIntervalId);
       }
@@ -71,59 +40,84 @@ document.addEventListener('DOMContentLoaded', () => {
     timerIntervalId = setInterval(checkTimer, 1000);
   };
 
-  const initStickyBar = () => {
-    localStorage.setItem('exitModalClosed', 'true');
-    showStickyBar();
-    startStickyTimer();
+  const showStickyBar = () => {
+    if (localStorage.getItem('offerActive') === 'true') {
+      // Evita duplicatas
+      if (document.querySelector('.sticky-offer-bar')) return;
+
+      // Atualiza preços do downsell nativamente
+      const ofertaValores = document.querySelectorAll('.oferta-valor');
+      ofertaValores.forEach(el => {
+        if (el.textContent.includes('97')) {
+          el.textContent = 'R$ 57,90';
+        }
+      });
+      const ofertaDe = document.querySelectorAll('.oferta-de');
+      ofertaDe.forEach(el => el.textContent = 'De R$ 97,00');
+
+      // Cria elemento dinamicamente
+      const stickyHTML = `
+        <div class="sticky-offer-bar">
+          ⚠️ OFERTA EXCLUSIVA: R$ 57,90 por tempo limitado!
+          <span class="timer">15:00</span>
+          <a href="#oferta" class="btn-offer">GARANTIR AGORA</a>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('afterbegin', stickyHTML);
+      
+      // Adiciona padding para não cobrir site (desktop)
+      // No mobile, o CSS providenciado pelo usuário já cuida disso via media query
+      if (window.innerWidth > 600) {
+        document.body.style.paddingTop = '60px';
+      }
+
+      const timerEl = document.querySelector('.sticky-offer-bar .timer');
+      startStickyTimer(timerEl);
+    }
   };
 
-  // Se a barra já foi ativada em uma visita anterior
-  if (localStorage.getItem('exitModalClosed') === 'true') {
+  // Se o usuário recarregou a página e a offerActive já existe, exibe direto.
+  if (localStorage.getItem('offerActive') === 'true') {
     showStickyBar();
-    startStickyTimer();
   }
 
   // ==== LÓGICA DO MODAL DE SAÍDA ====
 
   window.closeExitModal = function(applyDiscount = false) {
     if (modal) {
+      // Esconde o modal diretamente
+      modal.style.display = 'none';
       modal.classList.remove('active');
     }
-    isModalVisible = false;
+    
     if (intervalId) {
       clearInterval(intervalId);
     }
-    
-    // Se o usuário clicar no botão CTA dentro do modal
+
+    // Se clicou no botão para ir pro desconto
     if (applyDiscount) {
       const ofertaSection = document.querySelector('#oferta');
-      if(ofertaSection) {
+      if (ofertaSection) {
         ofertaSection.scrollIntoView({ behavior: 'smooth' });
       }
     }
 
-    // Ativa o Sticky Bar quando o modal é fechado (por qualquer motivo)
-    if (localStorage.getItem('exitModalClosed') !== 'true') {
-      initStickyBar();
-    }
+    // Lógica principal: Ativar o offerActive e rodar Sticky
+    localStorage.setItem('offerActive', 'true');
+    showStickyBar();
   };
 
-  // Evento do botão CTA dentro do Modal
-  const modalCta = modal ? modal.querySelector('.exit-intent-btn') : null;
-  if (modalCta) {
-    modalCta.addEventListener('click', (e) => {
-      // Impede o padrão se quiser tratar o scroll via JS, mas o href="#oferta" já ajuda
+  // Botão CTA dentro do Pop-up (O onclick original chamava closeExitModal direto,
+  // mas aqui vamos garantir se o usuário quiser rolar automático).
+  const exitCta = modal ? modal.querySelector('.exit-intent-btn') : null;
+  if (exitCta) {
+    exitCta.addEventListener('click', (e) => {
       closeExitModal(true);
     });
   }
 
-  // Ação do botão do Sticky Bar (redireciona para oferta)
-  if (stickyBtn) {
-    stickyBtn.addEventListener('click', (e) => {
-      // Redireciona via âncora, os preços já foram atualizados globalmente
-    });
-  }
-
+  // Simulação de Vendas
   const startSalesSimulation = () => {
     if (!vendasCountEl) return;
     if (intervalId) clearInterval(intervalId);
@@ -134,26 +128,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4500);
   };
 
-  const showModal = () => {
-    // Só mostra se o modal existir, não estiver visível, e nem o modal nem o sticky já estiverem ativos
-    if (modal && !isModalVisible && !localStorage.getItem('exitIntentShown') && localStorage.getItem('stickyBarActive') !== 'true') {
+  let isModalTriggered = false;
+  const triggerModal = () => {
+    if (modal && !isModalTriggered && !localStorage.getItem('exitIntentShown') && localStorage.getItem('offerActive') !== 'true') {
       modal.classList.add('active');
-      isModalVisible = true;
+      isModalTriggered = true;
       localStorage.setItem('exitIntentShown', 'true');
       startSalesSimulation();
     }
   };
 
+  // Gatilho Desktop: mouse sai pelo topo
   document.addEventListener('mouseleave', (e) => {
     if (e.clientY < 10) {
-      showModal();
+      triggerModal();
     }
   });
 
+  // Gatilho Mobile: tempo
   setTimeout(() => {
-    showModal();
+    triggerModal();
   }, 20000);
 
+  // Gatilho Alternativo: Scroll rápido pra cima
   let lastScrollY = window.scrollY;
   let lastScrollTime = Date.now();
 
@@ -165,14 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentScrollY < lastScrollY && timeDiff > 0) {
       const scrollSpeed = (lastScrollY - currentScrollY) / timeDiff;
       if (scrollSpeed > 2 && currentScrollY > 100) {
-        showModal();
+        triggerModal();
       }
     }
-    
     lastScrollY = currentScrollY;
     lastScrollTime = currentTime;
   });
-  
+
   if (modal) {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
