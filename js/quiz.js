@@ -72,38 +72,31 @@ function formatarBRL(v) {
   return 'R$ ' + v.toLocaleString('pt-BR');
 }
 
-function enviarParaPlanilha(nome, email, telefone) {
-  const url = 'https://script.google.com/macros/s/AKfycbzg_4RJwK2QwCA7bslNlHV5qWaoit8GPFtVDVMuFfIWdW-wFaI3q3NuyOxPpwrYq1yd/exec';
-  const finalUrl = `${url}?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&telefone=${encodeURIComponent(telefone)}`;
-
-  fetch(finalUrl, {
-      method: 'POST',
-      mode: 'no-cors'
-  })
-  .then(() => {
-      console.log('Dados enviados!');
-      window.location.href = 'vendas.html'; 
-  })
-  .catch(err => {
-      console.error('Erro:', err);
-      // Timeout de fallback de qualquer jeito pra não travar a venda
-      window.location.href = 'vendas.html';
-  });
-}
-
 // Submissão do formulário de captura
 function submitLead(e) {
   e.preventDefault();
 
   const nome = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
-  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const telefone = document.getElementById('whatsapp').value.trim();
 
   // Tela de loading
   showStep(8);
 
-  // Envia pra planilha e redireciona
-  enviarParaPlanilha(nome, email, whatsapp);
+  const urlPlanilha = 'https://script.google.com/macros/s/AKfycbzg_4RJwK2QwCA7bslNlHV5qWaoit8GPFtVDVMuFfIWdW-wFaI3q3NuyOxPpwrYq1yd/exec';
+  const params = `?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&telefone=${encodeURIComponent(telefone)}`;
+
+  // O modo 'no-cors' é vital para o Google Apps Script funcionar
+  fetch(urlPlanilha + params, {
+      method: 'GET',
+      mode: 'no-cors'
+  }).then(() => {
+      console.log('Lead salvo com sucesso!');
+      window.location.href = 'vendas.html'; 
+  }).catch(() => {
+      // Se der erro, redireciona de qualquer forma para não perder a venda
+      window.location.href = 'vendas.html';
+  });
 }
 
 // Máscara simples pro WhatsApp
