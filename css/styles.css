@@ -1268,14 +1268,14 @@ footer a {
   width: 100%;
 }
 
-  .exit-intent-scarcity {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    line-height: 1.4;
-    margin: 0;
-  }
-  
-  /* ============ STICKY OFFER BAR ============ */
+.exit-intent-scarcity {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ============ STICKY OFFER BAR ============ */
 .sticky-offer-bar {
   position: fixed;
   top: 0;
@@ -1289,14 +1289,14 @@ footer a {
   justify-content: center;
   gap: 15px;
   padding: 10px 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 0.9rem;
 }
 
 .sticky-offer-bar .timer {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
   border-radius: 4px;
   color: var(--yellow);
@@ -1317,8 +1317,16 @@ footer a {
 
 /* Ajuste mobile */
 @media (max-width: 600px) {
-  .sticky-offer-bar { flex-direction: column; gap: 5px; text-align: center; font-size: 0.8rem; }
-  body { padding-top: 80px !important; }
+  .sticky-offer-bar {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  body {
+    padding-top: 80px !important;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1326,16 +1334,20 @@ footer a {
     width: 95%;
     padding: 20px 15px;
   }
+
   .exit-intent-sub {
     margin-bottom: 15px;
   }
+
   .exit-intent-proof {
     margin-bottom: 15px;
     padding: 8px;
   }
+
   .exit-intent-offer {
     margin-bottom: 15px;
   }
+
   .exit-intent-btn {
     padding: 12px 16px;
   }
