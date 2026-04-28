@@ -20,13 +20,54 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   });
 
-  // GATILHO MOBILE: Inatividade
-  // Se o usuário tentar voltar ou após 20 segundos sem interagir
-  setTimeout(function() {
-      if (!localStorage.getItem('exitModalClosed')) {
-          activatePopup();
+  // GATILHO MOBILE 1: Scroll Reverso
+  let lastScrollY = window.scrollY;
+  let lastScrollTime = Date.now();
+
+  window.addEventListener('scroll', function() {
+      const isMobile = window.innerWidth <= 768;
+      const currentScrollY = window.scrollY;
+      const currentTime = Date.now();
+      const timeDiff = currentTime - lastScrollTime;
+      const halfPageHeight = document.body.scrollHeight / 2;
+
+      // Se for mobile e já rolou mais da metade da página
+      if (isMobile && currentScrollY > halfPageHeight) {
+          if (currentScrollY < lastScrollY && timeDiff > 0) {
+              const scrollSpeed = (lastScrollY - currentScrollY) / timeDiff;
+              // Velocidade de scroll para cima
+              if (scrollSpeed > 1.5) {
+                  activatePopup();
+              }
+          }
       }
-  }, 25000); 
+      lastScrollY = currentScrollY;
+      lastScrollTime = currentTime;
+  });
+
+  // GATILHO MOBILE 2: Tempo/Inatividade na área de checkout
+  let inactivityTimer = null;
+  const resetInactivityTimer = () => {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+      
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile) return;
+
+      const ofertaSection = document.getElementById('oferta');
+      if (ofertaSection) {
+          const rect = ofertaSection.getBoundingClientRect();
+          // Se o topo da seção de oferta estiver visível ou acima da tela
+          if (rect.top <= window.innerHeight) {
+              inactivityTimer = setTimeout(() => {
+                  activatePopup();
+              }, 7000); // 7 segundos de inatividade
+          }
+      }
+  };
+
+  ['scroll', 'touchstart', 'click'].forEach(evt => {
+      window.addEventListener(evt, resetInactivityTimer, { passive: true });
+  });
 
   // Adiciona listener para fechar o modal clicando fora
   if (modal) {
