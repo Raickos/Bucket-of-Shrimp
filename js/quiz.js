@@ -76,15 +76,19 @@ function formatarBRL(v) {
 function submitLead(e) {
   e.preventDefault();
 
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+
   const lead = {
-    nome: document.getElementById('nome').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    whatsapp: document.getElementById('whatsapp').value.trim(),
+    nome: nome,
+    email: email,
+    whatsapp: whatsapp,
     respostas: { ...answers },
     timestamp: new Date().toISOString()
   };
 
-  // Salva no localStorage (pode ser enviado pra webhook/CRM depois)
+  // Salva no localStorage (backup local)
   try {
     const leads = JSON.parse(localStorage.getItem('bo_leads') || '[]');
     leads.push(lead);
@@ -92,18 +96,41 @@ function submitLead(e) {
     localStorage.setItem('bo_current_lead', JSON.stringify(lead));
   } catch(err) { console.warn('localStorage falhou:', err); }
 
-  // TODO: integrar com webhook/Zapier/Make/API
-  // fetch('https://seu-webhook.com/lead', { method:'POST', body: JSON.stringify(lead) });
-
   // Tela de loading
   showStep(8);
 
-  // Simula processamento e mostra resultado
-  setTimeout(() => {
-    const valor = calcularPotencial();
-    document.getElementById('resultAmount').textContent = formatarBRL(valor);
-    showStep(9);
-  }, 2200);
+  // Prepara dados para Google Sheets
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzg_4RJwK2QwCA7bslNlHV5qWaoit8GPFtVDVMuFfIWdW-wFaI3q3NuyOxPpwrYq1yd/exec';
+  const formData = new FormData();
+  formData.append('Nome', nome);
+  formData.append('Email', email);
+  formData.append('Telefone', whatsapp);
+
+  let isRedirected = false;
+
+  const redirectToSales = () => {
+    if (!isRedirected) {
+      isRedirected = true;
+      window.location.href = 'vendas.html';
+    }
+  };
+
+  // Timeout garantido de 2 segundos para não prender o usuário
+  setTimeout(redirectToSales, 2000);
+
+  // Dispara a requisição
+  fetch(scriptURL, { 
+    method: 'POST', 
+    body: formData 
+  })
+  .then(response => {
+    console.log('Lead enviado com sucesso!', response);
+    redirectToSales();
+  })
+  .catch(error => {
+    console.error('Erro ao enviar lead:', error);
+    redirectToSales();
+  });
 }
 
 // Máscara simples pro WhatsApp
