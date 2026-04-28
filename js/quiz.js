@@ -72,6 +72,25 @@ function formatarBRL(v) {
   return 'R$ ' + v.toLocaleString('pt-BR');
 }
 
+function enviarParaPlanilha(nome, email, telefone) {
+  const url = 'https://script.google.com/macros/s/AKfycbzg_4RJwK2QwCA7bslNlHV5qWaoit8GPFtVDVMuFfIWdW-wFaI3q3NuyOxPpwrYq1yd/exec';
+  const finalUrl = `${url}?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&telefone=${encodeURIComponent(telefone)}`;
+
+  fetch(finalUrl, {
+      method: 'POST',
+      mode: 'no-cors'
+  })
+  .then(() => {
+      console.log('Dados enviados!');
+      window.location.href = 'vendas.html'; 
+  })
+  .catch(err => {
+      console.error('Erro:', err);
+      // Timeout de fallback de qualquer jeito pra não travar a venda
+      window.location.href = 'vendas.html';
+  });
+}
+
 // Submissão do formulário de captura
 function submitLead(e) {
   e.preventDefault();
@@ -80,57 +99,11 @@ function submitLead(e) {
   const email = document.getElementById('email').value.trim();
   const whatsapp = document.getElementById('whatsapp').value.trim();
 
-  const lead = {
-    nome: nome,
-    email: email,
-    whatsapp: whatsapp,
-    respostas: { ...answers },
-    timestamp: new Date().toISOString()
-  };
-
-  // Salva no localStorage (backup local)
-  try {
-    const leads = JSON.parse(localStorage.getItem('bo_leads') || '[]');
-    leads.push(lead);
-    localStorage.setItem('bo_leads', JSON.stringify(leads));
-    localStorage.setItem('bo_current_lead', JSON.stringify(lead));
-  } catch(err) { console.warn('localStorage falhou:', err); }
-
   // Tela de loading
   showStep(8);
 
-  // Prepara dados para Google Sheets
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzg_4RJwK2QwCA7bslNlHV5qWaoit8GPFtVDVMuFfIWdW-wFaI3q3NuyOxPpwrYq1yd/exec';
-  const formData = new FormData();
-  formData.append('Nome', nome);
-  formData.append('Email', email);
-  formData.append('Telefone', whatsapp);
-
-  let isRedirected = false;
-
-  const redirectToSales = () => {
-    if (!isRedirected) {
-      isRedirected = true;
-      window.location.href = 'vendas.html';
-    }
-  };
-
-  // Timeout garantido de 2 segundos para não prender o usuário
-  setTimeout(redirectToSales, 2000);
-
-  // Dispara a requisição
-  fetch(scriptURL, { 
-    method: 'POST', 
-    body: formData 
-  })
-  .then(response => {
-    console.log('Lead enviado com sucesso!', response);
-    redirectToSales();
-  })
-  .catch(error => {
-    console.error('Erro ao enviar lead:', error);
-    redirectToSales();
-  });
+  // Envia pra planilha e redireciona
+  enviarParaPlanilha(nome, email, whatsapp);
 }
 
 // Máscara simples pro WhatsApp
